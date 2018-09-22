@@ -5,9 +5,12 @@ import struct
 import math
 import numpy as np
 import control_functions
+import pyautogui
+
+
 
 #--------CONSTANTS----------
-TOLERANCE = 50
+TOLERANCE = 100
 THRESH = 0.1
 N = 10
 
@@ -15,11 +18,11 @@ N = 10
 #---------COMMANDS----------
 
 # n = neutral, u = up, d = down
-commands = ['uu', 'dd','nn','ud']
+commands = ['uu', 'dd','nn','ud', 'du']
 
 
 
-def rms( data ):
+def rms(data):
     count = len(data)/2
     format = "%dh"%(count)
     shorts = struct.unpack( format, data )
@@ -28,6 +31,7 @@ def rms( data ):
         n = sample * (1.0/32768)
         sum_squares += n*n
     return math.sqrt( sum_squares / count )
+
 
 def listen():
     while True:
@@ -78,18 +82,19 @@ def listen():
                 past.append(thefreq)
                 #check for part of command
                 if rms(data)>THRESH:
-                    if not active and max(past)-min(past)<TOLERANCE:
+                    if not active and max(past) - min(past) < TOLERANCE:
                         command.append(np.mean(past))
                         active = True
                         print(command)
                 else:
                     active = False
                 #check for command completion
+
                 if len(command)==3:
                     #convert command to string
                     comstr = ''
                     for i in range(len(command)-1):
-                        t = command[i+1]-command[i]
+                        t = command[i+1] - command[i]
                         if abs(t)<TOLERANCE:
                             comstr += 'n'
                         elif t > 0:
@@ -98,13 +103,18 @@ def listen():
                             comstr += 'd'
                     if comstr in commands:
                         if comstr == 'uu':
-                           control_functions.open_website('https://www.facebook.com/')
+                           control_functions.press_key('w')
+                           #control_functions.open_website('https://www.facebook.com/')
                         if comstr == 'dd':
-                            control_functions.open_website('https://www.youtube.com/')
+                            control_functions.press_key('s')
+                            #control_functions.open_website('https://www.youtube.com/')
                         if comstr == 'ud':
-                            exit()
-
-
+                            control_functions.press_key('d')
+                            #control_functions.press_key('HEllo world!!!')
+                        if comstr == 'du':
+                            control_functions.press_key('a')
+                        if comstr == 'nn':
+                            pass
                     command = []
 
     print("* done")
@@ -115,5 +125,6 @@ def listen():
     p.terminate()
 
 
-listen()
+if __name__ == '__main__':
+    listen()
 
