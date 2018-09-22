@@ -7,5 +7,4 @@ def open_website(website_url):
 
 
 def press_key(text):
-    pyautogui.typewrite(text)
-
+    pyautogui.press(text)

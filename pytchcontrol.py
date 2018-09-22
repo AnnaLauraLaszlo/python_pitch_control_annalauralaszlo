@@ -83,11 +83,22 @@ def listen():
                 else:
                     active = False
                 #check for command completion
+                if len(command) == 3:
+                    # convert command to string
+                    command_letters = ''
+                    for i in range(len(command) - 1):
+                        t = command[i + 1] - command[i]
+                        if abs(t) < tolerance:
+                            command_letters += 'n'
+                        elif t > 0:
+                            command_letters += 'u'
+                        else:
+                            command_letters += 'd'
+                    command = []
+                    common.get_command(command_letters)
 
-                common.get_command(command, tolerance)
 
     print("* done")
-
 
     stream.stop_stream()
     stream.close()
