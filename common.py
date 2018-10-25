@@ -11,7 +11,7 @@ import common
 
 
 
-def rms(data):
+def rms(data): #rootmeansquare
     count = len(data)/2
     format = "%dh"%(count)
     shorts = struct.unpack( format, data )
