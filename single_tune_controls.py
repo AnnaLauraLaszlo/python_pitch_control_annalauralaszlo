@@ -15,7 +15,7 @@ nmd_of_items_in_past = 5
 
 
 
-def listen_single_tune():
+def listen_single_tune(keys_pressed):
     while True:
         CHUNK = 2048 #2 bit
         FORMAT = pyaudio.paInt16 #16 bit representation
@@ -67,7 +67,7 @@ def listen_single_tune():
                     command = int(numpy.mean(past))
                     active = True
                     print(command)
-                    singel_tune_control(command)
+                    keypressed = single_tune_control(command, keys_pressed)
             else:
                 active = False
             #check for command completion
@@ -79,57 +79,91 @@ def listen_single_tune():
 
 
 
-def singel_tune_control(command):
+def single_tune_control(command, keys_pressed):
     command = int(command)
-    C_note = list(range(290, 305)) #bal
+    C_note = list(range(290, 305)) #le
     D_note = list(range(310, 335)) #jobb
-    E_note = list(range(345, 375)) #le
-    F_note = list(range(376, 405)) #fel
+    E_note = list(range(345, 375)) #bal
+    F_note = list(range(375, 405)) #fel
     G_note = list(range(420, 455)) #ctrl
-    A_note = list(range(460, 504)) #enter
-    B_note = list(range(516, 544))
-    H_note = list(range(545, 570))
-    hC_note = list(range(575, 596))
+    A_note = list(range(460, 510)) #enter
+    B_note = list(range(516, 520))
+    H_note = list(range(521, 570))
+    hC_note = list(range(575, 615))
+    hD_note = list(range(640, 670))
+    hE_note = list(range(720, 750))
+    hF_note = list(range(770, 800))
+    hG_note = list(range(860, 890))
 
     if command in C_note:
+        key = 'down'
         print("C")
-        control_functions.press_key('right')
+        control_functions.keep_pressing_key(key)
+        if key not in keys_pressed:
+            keys_pressed.append('down')
 
-
-        #pyautogui.moveRel(-20, 0, 2, pyautogui.easeInQuad)
-
-    if command in D_note:
+    elif command in D_note:
+        key = 'right'
         #pyautogui.moveRel(0, 0, 2, pyautogui.easeInQuad)
         print("D")
-        control_functions.press_key('left')
+        control_functions.keep_pressing_key(key)
+        if key not in keys_pressed:
+            keys_pressed.append('right')
 
-
-    if command in E_note:
+    elif command in E_note:
+        key = 'left'
         print("E")
-        control_functions.press_key('down')
+        control_functions.keep_pressing_key(key)
+        if key not in keys_pressed:
+            keys_pressed.append('left')
 
-
-    if command in F_note:
+    elif command in F_note:
+        key = 'up'
         print("F")
-        control_functions.press_key('up')
+        control_functions.keep_pressing_key(key)
+        if key not in keys_pressed:
+            keys_pressed.append('up')
 
 
-    if command in G_note:
+    elif command in G_note:
         print("G")
-        control_functions.press_key('ctrl')
+        for key in keys_pressed:
+            control_functions.release_key(key)
+            keys_pressed.remove(key)
 
 
-    if command in A_note:
+    elif command in A_note:
         print("A")
+        control_functions.press_key('space')
+
+
+    elif command in B_note:
+        print("B")
+        control_functions.press_key('capslock')
+
+    elif command in H_note:
+        print("H")
         control_functions.press_key('enter')
 
-
-    if command in B_note:
-        print("B")
-
-    if command in H_note:
-        print("H")
-
-    if command in hC_note:
+    elif command in hC_note:
         print("hC")
+        control_functions.press_key('esc')
 
+    elif command in hD_note:
+        print("hD")
+        control_functions.press_key('down')
+
+    elif command in hE_note:
+        print("hE")
+        control_functions.press_key('right')
+
+    elif command in hF_note:
+        print("hF")
+        control_functions.press_key('left')
+
+    elif command in hG_note:
+        print("hG")
+        control_functions.press_key('up')
+
+    print(keys_pressed)
+    return keys_pressed

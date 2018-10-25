@@ -8,3 +8,11 @@ def open_website(website_url):
 
 def press_key(text):
     pyautogui.press(text)
+
+
+def keep_pressing_key(text):
+    pyautogui.keyDown(text)
+
+
+def release_key(text):
+    pyautogui.keyUp(text)

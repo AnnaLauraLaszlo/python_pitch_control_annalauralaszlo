@@ -17,7 +17,8 @@ if __name__ == '__main__':
     if user_inputs == '1':
         multi_tune_controls.listen_multi_tune()
     elif user_inputs == '2':
-        single_tune_controls.listen_single_tune()
+        keys_pressed = []
+        single_tune_controls.listen_single_tune(keys_pressed)
     else:
         exit()
 
