@@ -10,24 +10,12 @@ import common
 
 
 
-#--------CONSTANTS----------
 tolerance = 100
-THRESH = 0.1
-N = 10
+not_usable_tune = 0.1
+nmb_of_items_in_past = 10
 
 
-def rms(data):
-    count = len(data)/2
-    format = "%dh"%(count)
-    shorts = struct.unpack( format, data )
-    sum_squares = 0.0
-    for sample in shorts:
-        n = sample * (1.0/32768)
-        sum_squares += n*n
-    return math.sqrt( sum_squares / count )
-
-
-def listen():
+def listen_multi_tune():
     while True:
         CHUNK = 2048
         FORMAT = pyaudio.paInt16
@@ -38,7 +26,7 @@ def listen():
         window = numpy.blackman(CHUNK)
         swidth = 2
 
-        past = [-1]*N
+        past = [-1] * nmb_of_items_in_past
         command = []
         active = False
 
@@ -74,7 +62,7 @@ def listen():
             past.pop(0)
             past.append(sound_frequence)
                 #check for part of command
-            if rms(data)>THRESH:
+            if common.rms(data)>not_usable_tune:
                 if not active and max(past) - min(past) < tolerance:
                     command.append(numpy.mean(past))
                     active = True
@@ -89,16 +77,6 @@ def listen():
                 common.get_command(command_letters)
 
 
-
         stream.stop_stream()
         stream.close()
         p.terminate()
-
-
-if __name__ == '__main__':
-    user_inputs = input("Press 1 for three-pitch mode, press 2 for single pitch activation, 3 to close")
-    if user_inputs == '1':
-        listen()
-    elif user_inputs == '2':
-        pass
-

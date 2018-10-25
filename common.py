@@ -1,7 +1,7 @@
 import control_functions
 import pyautogui
 import pyaudio
-import pytchcontrol
+import main
 import wave
 import sys
 import struct
@@ -11,10 +11,22 @@ import common
 
 
 
+def rms(data):
+    count = len(data)/2
+    format = "%dh"%(count)
+    shorts = struct.unpack( format, data )
+    sum_squares = 0.0
+    for sample in shorts:
+        n = sample * (1.0/32768)
+        sum_squares += n*n
+    return math.sqrt( sum_squares / count )
+
+
+
 def create_command_list(data, command, past, tolerance):
     usable_sound = 0.01
     active = False
-    if not active and pytchcontrol.rms(data) > usable_sound:
+    if not active and main.rms(data) > usable_sound:
         if max(past) - min(past) < tolerance:
             print("numpy.mean(past):%s" % numpy.mean(past))
             command.append(numpy.mean(past))  # arithmetic mean
