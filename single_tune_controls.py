@@ -85,15 +85,15 @@ def single_tune_control(command, keys_pressed):
     D_note = list(range(310, 335)) #jobb
     E_note = list(range(345, 375)) #bal
     F_note = list(range(375, 405)) #fel
-    G_note = list(range(420, 455)) #ctrl
-    A_note = list(range(460, 510)) #enter
-    B_note = list(range(516, 520))
-    H_note = list(range(521, 570))
-    hC_note = list(range(575, 615))
-    hD_note = list(range(640, 670))
-    hE_note = list(range(720, 750))
-    hF_note = list(range(770, 800))
-    hG_note = list(range(860, 890))
+    G_note = list(range(420, 455)) #stopmovement
+    A_note = list(range(460, 510)) #action
+    B_note = list(range(516, 531)) #chapslock
+    H_note = list(range(535, 570)) #enter
+    hC_note = list(range(575, 615)) #esc
+    hD_note = list(range(640, 670)) #rövidle
+    hE_note = list(range(720, 750)) #rövidjobb
+    hF_note = list(range(770, 800)) #rövidbal
+    hG_note = list(range(860, 890)) #rövidfel
 
     if command in C_note:
         key = 'down'
